@@ -10,20 +10,20 @@ router.post('/signup', async (req, res) =>{
         const rawAadharCardNumber = data.aadharCardNumber ?? data.aadhar ?? data.aadhaarNumber ?? data['Aadhar Card Number'];
         const aadharCardNumber = String(rawAadharCardNumber ?? '').replace(/\D/g, '').trim();
 
-        // Check if there is already an admin user
+ // Check if there is already an admin user
         const adminUser = await User.findOne({ role: 'admin' });
         if (data.role === 'admin' && adminUser) {
             return res.status(400).json({ error: 'Admin user already exists' });
         }
 
-        // Validate Aadhar Card Number must have exactly 12 digits
+ // Validate Aadhar Card Number must have exactly 12 digits
         if (!/^\d{12}$/.test(aadharCardNumber)) {
             return res.status(400).json({ error: 'Aadhar Card Number must be exactly 12 digits' });
         }
 
         data.aadharCardNumber = aadharCardNumber;
 
-        // Check if a user with the same Aadhar Card Number already exists
+  // Check if a user with the same Aadhar Card Number already exists
         const existingUser = await User.findOne({ aadharCardNumber });
         if (existingUser) {
             return res.status(400).json({ error: 'User with the same Aadhar Card Number already exists' });
@@ -70,7 +70,7 @@ router.post('/login', async(req, res) => {
             return res.status(401).json({error: 'Invalid Aadhar Card Number or Password'});
         }
 
-        // generate Token
+ // generate Token
         const payload = {
             id: user.id,
         }
